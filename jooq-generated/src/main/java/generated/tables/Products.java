@@ -63,9 +63,9 @@ public class Products extends TableImpl<ProductsRecord> {
     public final TableField<ProductsRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR.nullable(false), this, "");
 
     /**
-     * The column <code>public.products.organization</code>.
+     * The column <code>public.products.organization_id</code>.
      */
-    public final TableField<ProductsRecord, String> ORGANIZATION = createField(DSL.name("organization"), SQLDataType.VARCHAR.nullable(false), this, "");
+    public final TableField<ProductsRecord, Integer> ORGANIZATION_ID = createField(DSL.name("organization_id"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>public.products.amount</code>.
@@ -121,8 +121,21 @@ public class Products extends TableImpl<ProductsRecord> {
     }
 
     @Override
-    public List<UniqueKey<ProductsRecord>> getUniqueKeys() {
-        return Arrays.asList(Keys.PRODUCTS_ORGANIZATION_KEY);
+    public List<ForeignKey<ProductsRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.PRODUCTS__PRODUCTS_ORGANIZATION_ID_FKEY);
+    }
+
+    private transient Organizations _organizations;
+
+    /**
+     * Get the implicit join path to the <code>public.organizations</code>
+     * table.
+     */
+    public Organizations organizations() {
+        if (_organizations == null)
+            _organizations = new Organizations(this, Keys.PRODUCTS__PRODUCTS_ORGANIZATION_ID_FKEY);
+
+        return _organizations;
     }
 
     @Override
@@ -169,14 +182,14 @@ public class Products extends TableImpl<ProductsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, String, String, Integer> fieldsRow() {
+    public Row4<Integer, String, Integer, Integer> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function4<? super Integer, ? super String, ? super String, ? super Integer, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function4<? super Integer, ? super String, ? super Integer, ? super Integer, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -184,7 +197,7 @@ public class Products extends TableImpl<ProductsRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super Integer, ? super String, ? super String, ? super Integer, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super Integer, ? super String, ? super Integer, ? super Integer, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

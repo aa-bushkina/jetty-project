@@ -5,6 +5,7 @@ package generated;
 
 
 import generated.tables.FlywaySchemaHistory;
+import generated.tables.Organizations;
 import generated.tables.Products;
 
 
@@ -18,6 +19,11 @@ public class Tables {
      * The table <code>public.flyway_schema_history</code>.
      */
     public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
+
+    /**
+     * The table <code>public.organizations</code>.
+     */
+    public static final Organizations ORGANIZATIONS = Organizations.ORGANIZATIONS;
 
     /**
      * The table <code>public.products</code>.

@@ -5,10 +5,13 @@ package generated;
 
 
 import generated.tables.FlywaySchemaHistory;
+import generated.tables.Organizations;
 import generated.tables.Products;
 import generated.tables.records.FlywaySchemaHistoryRecord;
+import generated.tables.records.OrganizationsRecord;
 import generated.tables.records.ProductsRecord;
 
+import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -27,6 +30,13 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
+    public static final UniqueKey<OrganizationsRecord> ORGANIZATION_PK = Internal.createUniqueKey(Organizations.ORGANIZATIONS, DSL.name("organization_pk"), new TableField[] { Organizations.ORGANIZATIONS.ID }, true);
+    public static final UniqueKey<OrganizationsRecord> ORGANIZATIONS_INN_KEY = Internal.createUniqueKey(Organizations.ORGANIZATIONS, DSL.name("organizations_inn_key"), new TableField[] { Organizations.ORGANIZATIONS.INN }, true);
     public static final UniqueKey<ProductsRecord> PRODUCT_PK = Internal.createUniqueKey(Products.PRODUCTS, DSL.name("product_pk"), new TableField[] { Products.PRODUCTS.ID }, true);
-    public static final UniqueKey<ProductsRecord> PRODUCTS_ORGANIZATION_KEY = Internal.createUniqueKey(Products.PRODUCTS, DSL.name("products_organization_key"), new TableField[] { Products.PRODUCTS.ORGANIZATION }, true);
+
+    // -------------------------------------------------------------------------
+    // FOREIGN KEY definitions
+    // -------------------------------------------------------------------------
+
+    public static final ForeignKey<ProductsRecord, OrganizationsRecord> PRODUCTS__PRODUCTS_ORGANIZATION_ID_FKEY = Internal.createForeignKey(Products.PRODUCTS, DSL.name("products_organization_id_fkey"), new TableField[] { Products.PRODUCTS.ORGANIZATION_ID }, Keys.ORGANIZATION_PK, new TableField[] { Organizations.ORGANIZATIONS.ID }, true);
 }

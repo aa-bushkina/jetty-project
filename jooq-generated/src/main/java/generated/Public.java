@@ -5,6 +5,7 @@ package generated;
 
 
 import generated.tables.FlywaySchemaHistory;
+import generated.tables.Organizations;
 import generated.tables.Products;
 
 import java.util.Arrays;
@@ -34,6 +35,11 @@ public class Public extends SchemaImpl {
     public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
     /**
+     * The table <code>public.organizations</code>.
+     */
+    public final Organizations ORGANIZATIONS = Organizations.ORGANIZATIONS;
+
+    /**
      * The table <code>public.products</code>.
      */
     public final Products PRODUCTS = Products.PRODUCTS;
@@ -55,6 +61,7 @@ public class Public extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
+            Organizations.ORGANIZATIONS,
             Products.PRODUCTS
         );
     }
