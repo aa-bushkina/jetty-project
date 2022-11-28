@@ -14,3 +14,8 @@ should transmit to the web server the name of the product, the company and its q
 requests all products that have been added by users. The GET request handler reads all records from the storage and forms a response for the client with them.
 
 A specific URL provides help describing how to work with the web server.
+
+Args for run Main:
+DB url, DB name, DB username, DB password
+For example:
+jdbc:postgresql://localhost/ jetty postgres postgres
