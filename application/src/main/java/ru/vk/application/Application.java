@@ -1,6 +1,9 @@
 package ru.vk.application;
 
 import com.google.inject.Inject;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.jetbrains.annotations.NotNull;
 import ru.vk.server.MyServer;
 import ru.vk.server.MyServlet;
@@ -8,16 +11,13 @@ import ru.vk.server.MyServlet;
 public class Application {
   @NotNull
   final private FlywayInitializer initializer;
-  final private MyServer server;
-  final private MyServlet servlet;
+  final private MyServer myServer;
 
   @Inject
   public Application(@NotNull final FlywayInitializer initializer,
-                     @NotNull final MyServer server,
-                     @NotNull final MyServlet servlet) {
+                     @NotNull final MyServer myServer) {
     this.initializer = initializer;
-    this.server = server;
-    this.servlet = servlet;
+    this.myServer = myServer;
   }
 
   public void makeDB(@NotNull final String path) {
@@ -29,6 +29,13 @@ public class Application {
   }
 
   public void startServer() throws Exception {
+    final var context = new ServletContextHandler();
+    context.setContextPath("/");
+    context.addServlet(
+      new ServletHolder("servlet-products", MyServlet.class), "/"
+    );
+    final Server server = myServer.build();
+    server.setHandler(context);
     server.start();
   }
 }

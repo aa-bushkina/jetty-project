@@ -20,16 +20,12 @@ public final class MyServer {
   }
 
   public Server build(int port) {
-    final HttpConfiguration httpConfig = new HttpConfiguration();
-    final HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfig);
-    final ServerConnector serverConnector = new ServerConnector(server, httpConnectionFactory);
+    final ServerConnector serverConnector = new ServerConnector(
+      server,
+      new HttpConnectionFactory(new HttpConfiguration()));
     serverConnector.setHost("localhost");
     serverConnector.setPort(port);
     server.setConnectors(new Connector[]{serverConnector});
     return server;
-  }
-
-  public void start() throws Exception {
-    server.start();
   }
 }
