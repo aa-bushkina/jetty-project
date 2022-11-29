@@ -13,9 +13,9 @@ import org.eclipse.jetty.util.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import ru.vk.Main;
 import ru.vk.server.MyServer;
-import ru.vk.server.OnlyGetFilter;
-import ru.vk.server.ProductServlet;
+import ru.vk.server.filters.OnlyGetFilter;
 import ru.vk.server.security.SecurityHandlerBuilder;
+import ru.vk.server.servlets.ProductServlet;
 
 import java.net.URL;
 import java.util.EnumSet;
@@ -61,7 +61,6 @@ public class Application {
       new ServletHolder("servlet-help", DefaultServlet.class), "/");
     context.addFilter(filterGetHolder, "/", EnumSet.of(DispatcherType.REQUEST));
 
-
     final String hashConfig = Main.class.getResource("/config/hash_config").toExternalForm();
     final HashLoginService hashLoginService = new HashLoginService("login", hashConfig);
     final ConstraintSecurityHandler securityHandler = new SecurityHandlerBuilder().build(hashLoginService);
@@ -69,7 +68,6 @@ public class Application {
     securityHandler.setHandler(context);
     server.setHandler(securityHandler);
 
-    //server.setHandler(context);
     server.start();
   }
 }

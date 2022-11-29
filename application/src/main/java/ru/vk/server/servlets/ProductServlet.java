@@ -1,4 +1,4 @@
-package ru.vk.server;
+package ru.vk.server.servlets;
 
 import com.google.inject.Inject;
 import generated.tables.pojos.Organizations;

@@ -1,12 +1,10 @@
 package ru.vk.application;
 
 import com.google.inject.AbstractModule;
-import org.eclipse.jetty.server.Server;
 import org.jetbrains.annotations.NotNull;
 import ru.vk.application.repository.OrganizationDAO;
 import ru.vk.application.repository.ProductDAO;
 import ru.vk.application.utils.DBProperties;
-import ru.vk.server.MyServer;
 
 public class ApplicationModule extends AbstractModule {
   @NotNull
@@ -26,8 +24,6 @@ public class ApplicationModule extends AbstractModule {
     bind(FlywayInitializer.class).toInstance(new FlywayInitializer(properties));
     bind(OrganizationDAO.class).toInstance(new OrganizationDAO(properties));
     bind(ProductDAO.class).toInstance(new ProductDAO(properties));
-    bind(Server.class).toInstance(new Server());
-    bind(MyServer.class).toInstance(new MyServer(new Server()));
   }
 
   private boolean checkArgs(@NotNull final String[] args) {

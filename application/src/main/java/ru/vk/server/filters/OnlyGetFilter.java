@@ -1,4 +1,4 @@
-package ru.vk.server;
+package ru.vk.server.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
