@@ -1,5 +1,7 @@
 package ru.vk.application.repository;
 
+import com.google.inject.Inject;
+import generated.tables.pojos.Products;
 import generated.tables.records.ProductsRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
@@ -19,11 +21,11 @@ import static generated.tables.Products.PRODUCTS;
 import static org.jooq.impl.DSL.row;
 
 @SuppressWarnings({"NotNullNullableValidation", "SqlNoDataSourceInspection", "SqlResolve"})
-public final class ProductDAO implements Dao<ProductsRecord> {
+public final class ProductDAO implements Dao<Products> {
   @NotNull
   final DBProperties dbProperties;
 
-  //@Inject
+  @Inject
   public ProductDAO(@NotNull final DBProperties dbProperties) {
     this.dbProperties = dbProperties;
   }
@@ -36,15 +38,20 @@ public final class ProductDAO implements Dao<ProductsRecord> {
   }
 
   @Override
-  public @NotNull ProductsRecord get(final int id) {
+  public @NotNull Products get(final int id) {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final Record record = context
-        .select()
-        .from(PRODUCTS)
-        .where(PRODUCTS.ID.eq(id))
-        .fetchOne();
-      return (record == null) ? new ProductsRecord() : record.into(PRODUCTS);
+      final Products product;
+      try {
+        product = context
+          .select()
+          .from(PRODUCTS)
+          .where(PRODUCTS.ID.eq(id))
+          .fetchOne().into(Products.class);
+      } catch (NullPointerException exception) {
+        return new Products(null, null, null, null);
+      }
+      return product;
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
@@ -52,16 +59,14 @@ public final class ProductDAO implements Dao<ProductsRecord> {
   }
 
   @Override
-  public @NotNull List<ProductsRecord> all() {
+  public @NotNull List<Products> all() {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final @NotNull Result<Record> result = context
+      final @NotNull List<Products> result = context
         .select()
         .from(PRODUCTS)
-        .fetch();
-      ArrayList<ProductsRecord> list = new ArrayList<>();
-      result.forEach(record -> list.add((ProductsRecord) record));
-      return list;
+        .fetch().into(Products.class);
+      return new ArrayList<>(result);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -69,7 +74,7 @@ public final class ProductDAO implements Dao<ProductsRecord> {
   }
 
   @Override
-  public int save(@NotNull final ProductsRecord entity) {
+  public int save(@NotNull final Products entity) {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context
@@ -84,7 +89,7 @@ public final class ProductDAO implements Dao<ProductsRecord> {
   }
 
   @Override
-  public void update(@NotNull final ProductsRecord entity) {
+  public void update(@NotNull final Products entity) {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context.update(PRODUCTS)
@@ -98,7 +103,7 @@ public final class ProductDAO implements Dao<ProductsRecord> {
   }
 
   @Override
-  public void delete(@NotNull final ProductsRecord entity) {
+  public void delete(@NotNull final Products entity) {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context

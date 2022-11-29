@@ -1,6 +1,7 @@
 package ru.vk.application.repository;
 
 import com.google.inject.Inject;
+import generated.tables.pojos.Organizations;
 import generated.tables.records.OrganizationsRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
@@ -20,7 +21,7 @@ import static generated.tables.Organizations.ORGANIZATIONS;
 import static org.jooq.impl.DSL.row;
 
 @SuppressWarnings({"NotNullNullableValidation", "SqlNoDataSourceInspection", "SqlResolve"})
-public final class OrganizationDAO implements Dao<OrganizationsRecord> {
+public final class OrganizationDAO implements Dao<Organizations> {
   @NotNull
   DBProperties dbProperties;
 
@@ -37,15 +38,20 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
   }
 
   @Override
-  public @NotNull OrganizationsRecord get(final int id) {
+  public @NotNull Organizations get(final int id) {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final Record record = context
-        .select()
-        .from(ORGANIZATIONS)
-        .where(ORGANIZATIONS.ID.eq(id))
-        .fetchOne();
-      return (record == null) ? new OrganizationsRecord() : record.into(ORGANIZATIONS);
+      final Organizations organization;
+      try {
+        organization = context
+          .select()
+          .from(ORGANIZATIONS)
+          .where(ORGANIZATIONS.ID.eq(id))
+          .fetchOne().into(Organizations.class);
+      } catch (NullPointerException exception) {
+        return new Organizations(null, null);
+      }
+      return organization;
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
@@ -53,16 +59,14 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
   }
 
   @Override
-  public @NotNull List<OrganizationsRecord> all() {
+  public @NotNull List<Organizations> all() {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final @NotNull Result<Record> result = context
+      final @NotNull List<Organizations> result = context
         .select()
         .from(ORGANIZATIONS)
-        .fetch();
-      ArrayList<OrganizationsRecord> list = new ArrayList<>();
-      result.forEach(record -> list.add((OrganizationsRecord) record));
-      return list;
+        .fetch().into(Organizations.class);
+      return new ArrayList<>(result);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -70,7 +74,7 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
   }
 
   @Override
-  public int save(@NotNull final OrganizationsRecord entity) {
+  public int save(@NotNull final Organizations entity) {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context
@@ -85,7 +89,7 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
   }
 
   @Override
-  public void update(@NotNull final OrganizationsRecord entity) {
+  public void update(@NotNull final Organizations entity) {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context.update(ORGANIZATIONS)
@@ -99,7 +103,7 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
   }
 
   @Override
-  public void delete(@NotNull final OrganizationsRecord entity) {
+  public void delete(@NotNull final Organizations entity) {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context

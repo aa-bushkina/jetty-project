@@ -1,8 +1,8 @@
 package ru.vk.server;
 
 import com.google.inject.Inject;
-import generated.tables.records.OrganizationsRecord;
-import generated.tables.records.ProductsRecord;
+import generated.tables.pojos.Organizations;
+import generated.tables.pojos.Products;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,9 +31,9 @@ public class MyServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
     try (final PrintWriter out = resp.getWriter()) {
-      out.println("Hey");
+      out.println(productDAO.all());
+      resp.setStatus(HttpServletResponse.SC_OK);
     }
   }
 
@@ -53,10 +53,10 @@ public class MyServlet extends HttpServlet {
     }
     Integer organizationId = organizationDAO.findByName(organization).get(ORGANIZATIONS.ID);
     if (organizationId == null) {
-      organizationDAO.save(new OrganizationsRecord(0, organization));
+      organizationDAO.save(new Organizations(0, organization));
       organizationId = organizationDAO.findByName(organization).getId();
     }
-    productDAO.save(new ProductsRecord(0, name, organizationId, Integer.parseInt(amount)));
+    productDAO.save(new Products(0, name, organizationId, Integer.parseInt(amount)));
     resp.setStatus(HttpServletResponse.SC_OK);
     try (final PrintWriter out = resp.getWriter()) {
       out.println("Add product " + productDAO.findByName(name));
