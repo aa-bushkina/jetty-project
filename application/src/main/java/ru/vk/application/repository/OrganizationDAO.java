@@ -110,4 +110,19 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
       e.printStackTrace();
     }
   }
+
+  public @NotNull OrganizationsRecord findByName(@NotNull final String name) {
+    try (Connection conn = getConnection()) {
+      final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
+      final Record record = context
+        .select()
+        .from(ORGANIZATIONS)
+        .where(ORGANIZATIONS.NAME.eq(name))
+        .fetchOne();
+      return (record == null) ? new OrganizationsRecord() : record.into(ORGANIZATIONS);
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    throw new IllegalStateException("Record with name " + name + "not found");
+  }
 }
