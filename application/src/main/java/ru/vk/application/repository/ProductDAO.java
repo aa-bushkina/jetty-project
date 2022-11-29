@@ -1,6 +1,5 @@
 package ru.vk.application.repository;
 
-import com.google.inject.Inject;
 import generated.tables.records.ProductsRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
@@ -24,7 +23,7 @@ public final class ProductDAO implements Dao<ProductsRecord> {
   @NotNull
   final DBProperties dbProperties;
 
-  @Inject
+  //@Inject
   public ProductDAO(@NotNull final DBProperties dbProperties) {
     this.dbProperties = dbProperties;
   }
@@ -114,12 +113,12 @@ public final class ProductDAO implements Dao<ProductsRecord> {
   public @NotNull ProductsRecord findByName(@NotNull final String name) {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final Record record = context
+      final Result<Record> records = context
         .select()
         .from(PRODUCTS)
         .where(PRODUCTS.NAME.eq(name))
-        .fetchOne();
-      return (record == null) ? new ProductsRecord() : record.into(PRODUCTS);
+        .fetch();
+      return (records.isEmpty()) ? new ProductsRecord() : records.get(0).into(PRODUCTS);
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }

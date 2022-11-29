@@ -22,7 +22,7 @@ import static org.jooq.impl.DSL.row;
 @SuppressWarnings({"NotNullNullableValidation", "SqlNoDataSourceInspection", "SqlResolve"})
 public final class OrganizationDAO implements Dao<OrganizationsRecord> {
   @NotNull
-  final DBProperties dbProperties;
+  DBProperties dbProperties;
 
   @Inject
   public OrganizationDAO(@NotNull final DBProperties dbProperties) {
@@ -74,8 +74,8 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context
-        .insertInto(ORGANIZATIONS, ORGANIZATIONS.NAME, ORGANIZATIONS.INN)
-        .values(entity.getName(), entity.getInn())
+        .insertInto(ORGANIZATIONS, ORGANIZATIONS.NAME)
+        .values(entity.getName())
         .execute();
       return context.lastID().intValue();
     } catch (SQLException e) {
@@ -89,8 +89,8 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context.update(ORGANIZATIONS)
-        .set(row(ORGANIZATIONS.NAME, ORGANIZATIONS.INN),
-          row(entity.getName(), entity.getInn()))
+        .set(row(ORGANIZATIONS.NAME),
+          row(entity.getName()))
         .where(ORGANIZATIONS.ID.eq(entity.getId()))
         .execute();
     } catch (Exception e) {
@@ -114,12 +114,12 @@ public final class OrganizationDAO implements Dao<OrganizationsRecord> {
   public @NotNull OrganizationsRecord findByName(@NotNull final String name) {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final Record record = context
+      final Result<Record> records = context
         .select()
         .from(ORGANIZATIONS)
         .where(ORGANIZATIONS.NAME.eq(name))
-        .fetchOne();
-      return (record == null) ? new OrganizationsRecord() : record.into(ORGANIZATIONS);
+        .fetch();
+      return (records.isEmpty()) ? new OrganizationsRecord() : records.get(0).into(ORGANIZATIONS);
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }

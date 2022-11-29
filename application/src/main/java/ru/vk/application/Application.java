@@ -12,12 +12,15 @@ public class Application {
   @NotNull
   final private FlywayInitializer initializer;
   final private MyServer myServer;
+  final private MyServlet myServlet;
 
   @Inject
   public Application(@NotNull final FlywayInitializer initializer,
-                     @NotNull final MyServer myServer) {
+                     @NotNull final MyServer myServer,
+                     @NotNull final MyServlet myServlet) {
     this.initializer = initializer;
     this.myServer = myServer;
+    this.myServlet = myServlet;
   }
 
   public void makeDB(@NotNull final String path) {
@@ -32,7 +35,7 @@ public class Application {
     final var context = new ServletContextHandler();
     context.setContextPath("/");
     context.addServlet(
-      new ServletHolder("servlet-products", MyServlet.class), "/"
+      new ServletHolder("servlet-products", myServlet), "/"
     );
     final Server server = myServer.build();
     server.setHandler(context);
