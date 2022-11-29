@@ -74,8 +74,8 @@ public final class ProductDAO implements Dao<ProductsRecord> {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context
-        .insertInto(PRODUCTS, PRODUCTS.NAME, PRODUCTS.ORGANIZATION, PRODUCTS.AMOUNT)
-        .values(entity.getName(), entity.getOrganization(), entity.getAmount())
+        .insertInto(PRODUCTS, PRODUCTS.NAME, PRODUCTS.ORGANIZATION_ID, PRODUCTS.AMOUNT)
+        .values(entity.getName(), entity.getOrganizationId(), entity.getAmount())
         .execute();
       return context.lastID().intValue();
     } catch (SQLException e) {
@@ -89,8 +89,8 @@ public final class ProductDAO implements Dao<ProductsRecord> {
     try (var conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       context.update(PRODUCTS)
-        .set(row(PRODUCTS.NAME, PRODUCTS.ORGANIZATION, PRODUCTS.AMOUNT),
-          row(entity.getName(), entity.getOrganization(), entity.getAmount()))
+        .set(row(PRODUCTS.NAME, PRODUCTS.ORGANIZATION_ID, PRODUCTS.AMOUNT),
+          row(entity.getName(), entity.getOrganizationId(), entity.getAmount()))
         .where(PRODUCTS.ID.eq(entity.getId()))
         .execute();
     } catch (Exception e) {

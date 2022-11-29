@@ -119,7 +119,7 @@ public class Organizations extends TableImpl<OrganizationsRecord> {
 
     @Override
     public List<UniqueKey<OrganizationsRecord>> getUniqueKeys() {
-        return Arrays.asList(Keys.ORGANIZATIONS_INN_KEY);
+        return Arrays.asList(Keys.ORGANIZATIONS_NAME_KEY, Keys.ORGANIZATIONS_INN_KEY);
     }
 
     @Override

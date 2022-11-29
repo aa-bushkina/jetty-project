@@ -32,6 +32,7 @@ public class Keys {
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<OrganizationsRecord> ORGANIZATION_PK = Internal.createUniqueKey(Organizations.ORGANIZATIONS, DSL.name("organization_pk"), new TableField[] { Organizations.ORGANIZATIONS.ID }, true);
     public static final UniqueKey<OrganizationsRecord> ORGANIZATIONS_INN_KEY = Internal.createUniqueKey(Organizations.ORGANIZATIONS, DSL.name("organizations_inn_key"), new TableField[] { Organizations.ORGANIZATIONS.INN }, true);
+    public static final UniqueKey<OrganizationsRecord> ORGANIZATIONS_NAME_KEY = Internal.createUniqueKey(Organizations.ORGANIZATIONS, DSL.name("organizations_name_key"), new TableField[] { Organizations.ORGANIZATIONS.NAME }, true);
     public static final UniqueKey<ProductsRecord> PRODUCT_PK = Internal.createUniqueKey(Products.PRODUCTS, DSL.name("product_pk"), new TableField[] { Products.PRODUCTS.ID }, true);
 
     // -------------------------------------------------------------------------
