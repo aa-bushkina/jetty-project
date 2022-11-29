@@ -2,11 +2,16 @@ package ru.vk.application;
 
 import com.google.inject.Inject;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.jetbrains.annotations.NotNull;
+import ru.vk.Main;
 import ru.vk.server.MyServer;
 import ru.vk.server.ProductServlet;
+
+import java.net.URL;
 
 public class Application {
   @NotNull
@@ -32,12 +37,20 @@ public class Application {
   }
 
   public void startServer() throws Exception {
-    final var context = new ServletContextHandler();
-    context.setContextPath("/products/");
-    context.addServlet(
-      new ServletHolder("servlet-products", productServlet), "/"
-    );
     final Server server = myServer.build();
+
+    final var context = new ServletContextHandler();
+    context.setContextPath("/");
+    context.addServlet(
+      new ServletHolder("servlet-products", productServlet), "/products"
+    );
+
+    final URL resource = Main.class.getResource("/info");
+    context.setBaseResource(Resource.newResource(resource.toExternalForm()));
+    context.setWelcomeFiles(new String[]{"/helpInfo.html"});
+    context.addServlet(
+      new ServletHolder("servlet-help", DefaultServlet.class), "/");
+
     server.setHandler(context);
     server.start();
   }
