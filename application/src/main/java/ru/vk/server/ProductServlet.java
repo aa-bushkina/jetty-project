@@ -14,15 +14,15 @@ import ru.vk.application.repository.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class MyServlet extends HttpServlet {
+public class ProductServlet extends HttpServlet {
   @NotNull
   final ProductDAO productDAO;
   @NotNull
   final OrganizationDAO organizationDAO;
 
   @Inject
-  public MyServlet(@NotNull final ProductDAO productDAO,
-                   @NotNull final OrganizationDAO organizationDAO) {
+  public ProductServlet(@NotNull final ProductDAO productDAO,
+                        @NotNull final OrganizationDAO organizationDAO) {
     this.organizationDAO = organizationDAO;
     this.productDAO = productDAO;
   }

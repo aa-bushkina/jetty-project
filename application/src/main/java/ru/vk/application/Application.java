@@ -6,21 +6,21 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.jetbrains.annotations.NotNull;
 import ru.vk.server.MyServer;
-import ru.vk.server.MyServlet;
+import ru.vk.server.ProductServlet;
 
 public class Application {
   @NotNull
   final private FlywayInitializer initializer;
   final private MyServer myServer;
-  final private MyServlet myServlet;
+  final private ProductServlet productServlet;
 
   @Inject
   public Application(@NotNull final FlywayInitializer initializer,
                      @NotNull final MyServer myServer,
-                     @NotNull final MyServlet myServlet) {
+                     @NotNull final ProductServlet productServlet) {
     this.initializer = initializer;
     this.myServer = myServer;
-    this.myServlet = myServlet;
+    this.productServlet = productServlet;
   }
 
   public void makeDB(@NotNull final String path) {
@@ -35,7 +35,7 @@ public class Application {
     final var context = new ServletContextHandler();
     context.setContextPath("/products/");
     context.addServlet(
-      new ServletHolder("servlet-products", myServlet), "/"
+      new ServletHolder("servlet-products", productServlet), "/"
     );
     final Server server = myServer.build();
     server.setHandler(context);
