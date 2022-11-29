@@ -33,7 +33,7 @@ public class Application {
 
   public void startServer() throws Exception {
     final var context = new ServletContextHandler();
-    context.setContextPath("/");
+    context.setContextPath("/products/");
     context.addServlet(
       new ServletHolder("servlet-products", myServlet), "/"
     );
