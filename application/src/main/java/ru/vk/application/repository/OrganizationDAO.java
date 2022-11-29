@@ -2,11 +2,8 @@ package ru.vk.application.repository;
 
 import com.google.inject.Inject;
 import generated.tables.pojos.Organizations;
-import generated.tables.records.OrganizationsRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import ru.vk.application.utils.DBProperties;
@@ -115,15 +112,17 @@ public final class OrganizationDAO implements Dao<Organizations> {
     }
   }
 
-  public @NotNull OrganizationsRecord findByName(@NotNull final String name) {
+  public @NotNull Organizations findByName(@NotNull final String name) {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final Result<Record> records = context
+      final List<Organizations> organizations = context
         .select()
         .from(ORGANIZATIONS)
         .where(ORGANIZATIONS.NAME.eq(name))
-        .fetch();
-      return (records.isEmpty()) ? new OrganizationsRecord() : records.get(0).into(ORGANIZATIONS);
+        .fetch().into(Organizations.class);
+      return (organizations.isEmpty())
+        ? new Organizations(null, null)
+        : organizations.get(0);
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }

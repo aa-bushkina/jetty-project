@@ -2,11 +2,8 @@ package ru.vk.application.repository;
 
 import com.google.inject.Inject;
 import generated.tables.pojos.Products;
-import generated.tables.records.ProductsRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import ru.vk.application.utils.DBProperties;
@@ -115,15 +112,36 @@ public final class ProductDAO implements Dao<Products> {
     }
   }
 
-  public @NotNull ProductsRecord findByName(@NotNull final String name) {
+  public @NotNull Products findByName(@NotNull final String name) {
     try (Connection conn = getConnection()) {
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
-      final Result<Record> records = context
+      final List<Products> products = context
         .select()
         .from(PRODUCTS)
         .where(PRODUCTS.NAME.eq(name))
-        .fetch();
-      return (records.isEmpty()) ? new ProductsRecord() : records.get(0).into(PRODUCTS);
+        .fetch().into(Products.class);
+      return (products.isEmpty())
+        ? new Products(null, null, null, null)
+        : products.get(0);
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    throw new IllegalStateException("Record with name " + name + "not found");
+  }
+
+  public @NotNull Products findByNameAndOrganization(@NotNull final String name,
+                                                     final int id) {
+    try (Connection conn = getConnection()) {
+      final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
+      final List<Products> products = context
+        .select()
+        .from(PRODUCTS)
+        .where(PRODUCTS.NAME.eq(name)
+          .and(PRODUCTS.ORGANIZATION_ID.eq(id)))
+        .fetch().into(Products.class);
+      return (products.isEmpty())
+        ? new Products(null, null, null, null)
+        : products.get(0);
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }

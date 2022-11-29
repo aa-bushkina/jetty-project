@@ -14,8 +14,6 @@ import ru.vk.application.repository.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static generated.tables.Organizations.ORGANIZATIONS;
-
 public class MyServlet extends HttpServlet {
   @NotNull
   final ProductDAO productDAO;
@@ -51,12 +49,23 @@ public class MyServlet extends HttpServlet {
       resp.setStatus(HttpStatus.BAD_REQUEST_400);
       return;
     }
-    Integer organizationId = organizationDAO.findByName(organization).get(ORGANIZATIONS.ID);
+
+    Integer organizationId = organizationDAO.findByName(organization).getId();
     if (organizationId == null) {
       organizationDAO.save(new Organizations(0, organization));
       organizationId = organizationDAO.findByName(organization).getId();
     }
-    productDAO.save(new Products(0, name, organizationId, Integer.parseInt(amount)));
+    final Products product = productDAO.findByNameAndOrganization(name, organizationId);
+    final Integer sameRecordId = product.getId();
+    if (sameRecordId != null) {
+      productDAO.update(new Products(
+        sameRecordId,
+        name,
+        organizationId,
+        product.getAmount() + Integer.parseInt(amount)));
+    } else {
+      productDAO.save(new Products(0, name, organizationId, Integer.parseInt(amount)));
+    }
     resp.setStatus(HttpServletResponse.SC_OK);
     try (final PrintWriter out = resp.getWriter()) {
       out.println("Add product " + productDAO.findByName(name));
