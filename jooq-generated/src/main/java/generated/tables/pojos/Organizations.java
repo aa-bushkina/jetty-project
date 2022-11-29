@@ -17,22 +17,18 @@ public class Organizations implements Serializable {
 
     private final Integer id;
     private final String name;
-    private final String inn;
 
     public Organizations(Organizations value) {
         this.id = value.id;
         this.name = value.name;
-        this.inn = value.inn;
     }
 
     public Organizations(
-        Integer id,
-        String name,
-        String inn
+      Integer id,
+      String name
     ) {
         this.id = id;
         this.name = name;
-        this.inn = inn;
     }
 
     /**
@@ -47,13 +43,6 @@ public class Organizations implements Serializable {
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * Getter for <code>public.organizations.inn</code>.
-     */
-    public String getInn() {
-        return this.inn;
     }
 
     @Override
@@ -77,12 +66,6 @@ public class Organizations implements Serializable {
         }
         else if (!this.name.equals(other.name))
             return false;
-        if (this.inn == null) {
-            if (other.inn != null)
-                return false;
-        }
-        else if (!this.inn.equals(other.inn))
-            return false;
         return true;
     }
 
@@ -92,7 +75,6 @@ public class Organizations implements Serializable {
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-        result = prime * result + ((this.inn == null) ? 0 : this.inn.hashCode());
         return result;
     }
 
@@ -102,7 +84,6 @@ public class Organizations implements Serializable {
 
         sb.append(id);
         sb.append(", ").append(name);
-        sb.append(", ").append(inn);
 
         sb.append(")");
         return sb.toString();
