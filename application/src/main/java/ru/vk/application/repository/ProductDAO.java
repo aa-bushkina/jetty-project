@@ -111,5 +111,18 @@ public final class ProductDAO implements Dao<ProductsRecord> {
     }
   }
 
-
+  public @NotNull ProductsRecord findByName(@NotNull final String name) {
+    try (Connection conn = getConnection()) {
+      final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
+      final Record record = context
+        .select()
+        .from(PRODUCTS)
+        .where(PRODUCTS.NAME.eq(name))
+        .fetchOne();
+      return (record == null) ? new ProductsRecord() : record.into(PRODUCTS);
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    throw new IllegalStateException("Record with name " + name + "not found");
+  }
 }
