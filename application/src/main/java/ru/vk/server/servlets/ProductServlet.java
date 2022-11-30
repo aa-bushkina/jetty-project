@@ -1,5 +1,6 @@
 package ru.vk.server.servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import generated.tables.pojos.Organizations;
 import generated.tables.pojos.Products;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class ProductServlet extends HttpServlet {
+  ObjectMapper objectMapper = new ObjectMapper();
   @NotNull
   final ProductDAO productDAO;
   @NotNull
@@ -30,7 +32,7 @@ public class ProductServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     try (final PrintWriter out = resp.getWriter()) {
-      out.println(productDAO.all());
+      out.println(objectMapper.writeValueAsString(productDAO.all()));
       resp.setStatus(HttpServletResponse.SC_OK);
     }
   }
