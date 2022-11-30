@@ -32,6 +32,8 @@ allprojects {
         implementation("org.jooq:jooq-codegen:3.17.5")
         implementation("org.jooq:jooq-meta:3.17.5")
 
+        implementation("com.fasterxml.jackson.core:jackson-databind:2.14.1")
+
         implementation("org.jetbrains:annotations:23.0.0")
         implementation("com.google.inject:guice:5.1.0")
 
