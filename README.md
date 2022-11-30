@@ -27,5 +27,15 @@ created. The company name is unique.
 
 #### GET method
 
-requests all products that have been added by users. The GET request handler reads all records from the storage and forms a response for the client with them.
+requests all products that have been added by users. The GET request handler reads all records from the storage and
+forms a response for the client with them.
 
+---
+The processing of client requests to the REST API has been rewritten. The list of products is given in the form of JSON.
+The product structure class is annotated with Jackson annotations for serialization\deserialization of the object.
+
+Another POST method has been added, in which the user passes the name of the product. The handler of this POST request
+finds a product with the same name, if there is a product, it deletes it and sends OK in response, if not, it responds
+with a 404 error to the user.
+Another GET method has been added, in which the user passes the manufacturer of the product. The handler of this GET
+request finds all products with such a manufacturer and sends them to the user.
