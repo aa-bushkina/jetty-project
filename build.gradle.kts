@@ -26,13 +26,14 @@ allprojects {
 
         implementation("org.flywaydb:flyway-core:9.7.0")
         implementation("org.postgresql:postgresql:42.5.0")
-        implementation("com.google.code.gson:gson:2.9.1")
 
         implementation("org.jooq:jooq:3.17.5")
         implementation("org.jooq:jooq-codegen:3.17.5")
         implementation("org.jooq:jooq-meta:3.17.5")
 
         implementation("com.fasterxml.jackson.core:jackson-databind:2.14.1")
+
+        implementation("javax.ws.rs:javax.ws.rs-api:2.1.1")
 
         implementation("org.jetbrains:annotations:23.0.0")
         implementation("com.google.inject:guice:5.1.0")
