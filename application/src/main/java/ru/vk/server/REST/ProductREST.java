@@ -32,9 +32,9 @@ public final class ProductREST {
   @POST
   @Produces(MediaType.TEXT_PLAIN)
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response add(@QueryParam("name") String name,
-                      @QueryParam("organization") String organization,
-                      @QueryParam("amount") Integer amount) throws JsonProcessingException {
+  public Response add(@FormParam("name") String name,
+                      @FormParam("organization") String organization,
+                      @FormParam("amount") Integer amount) throws JsonProcessingException {
     if ((name == null) || (organization == null) || (amount == null) ||
       (amount < 0)) {
       return Response.status(Response.Status.BAD_REQUEST)
@@ -76,7 +76,7 @@ public final class ProductREST {
   @POST
   @Produces(MediaType.TEXT_PLAIN)
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response delete(@QueryParam("name") String name) {
+  public Response delete(@FormParam("name") String name) {
     if (name == null) {
       return Response.status(Response.Status.BAD_REQUEST)
         .header(HttpHeaders.CACHE_CONTROL, "no-cache")
@@ -99,9 +99,22 @@ public final class ProductREST {
   @Path("/byorganization")
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getAllByOrganization() throws JsonProcessingException {
+  public Response getAllByOrganization(@QueryParam("organization") String organization) throws JsonProcessingException {
+    if (organization == null) {
+      return Response.status(Response.Status.BAD_REQUEST)
+        .header(HttpHeaders.CACHE_CONTROL, "no-cache")
+        .build();
+    }
+
+    Integer organizationId = organizationDAO.findByName(organization).getId();
+    if (organizationId == null) {
+      return Response.status(Response.Status.BAD_REQUEST)
+        .header(HttpHeaders.CACHE_CONTROL, "no-cache")
+        .build();
+    }
+
     @NotNull final ObjectMapper objectMapper = new ObjectMapper();
-    return Response.ok(objectMapper.writeValueAsString(productDAO.all()))
+    return Response.ok(objectMapper.writeValueAsString(productDAO.findAllByOrganization(organization)))
       .header(HttpHeaders.CACHE_CONTROL, "no-cache").build();
   }
 }

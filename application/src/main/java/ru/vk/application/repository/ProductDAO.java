@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static generated.Tables.ORGANIZATIONS;
 import static generated.tables.Products.PRODUCTS;
 import static org.jooq.impl.DSL.row;
 
@@ -147,5 +148,23 @@ public final class ProductDAO implements Dao<Products> {
       System.out.println(e.getMessage());
     }
     throw new IllegalStateException("Record with name " + name + " not found");
+  }
+
+  public @NotNull List<Products> findAllByOrganization(@NotNull final String organization) {
+    try (Connection conn = getConnection()) {
+      final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
+      final List<Products> products = context
+        .select(PRODUCTS.ID, PRODUCTS.NAME, ORGANIZATIONS.ID, PRODUCTS.AMOUNT)
+        .from(PRODUCTS)
+        .join(ORGANIZATIONS)
+        .on(PRODUCTS.ORGANIZATION_ID.eq(ORGANIZATIONS.ID))
+        .where(ORGANIZATIONS.NAME.eq(organization))
+        .groupBy(PRODUCTS.ID, PRODUCTS.NAME, ORGANIZATIONS.ID, PRODUCTS.AMOUNT)
+        .fetch().into(Products.class);
+      return (products.isEmpty()) ? new ArrayList<>() : products;
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    throw new IllegalStateException("Record with organization " + organization + " not found");
   }
 }
