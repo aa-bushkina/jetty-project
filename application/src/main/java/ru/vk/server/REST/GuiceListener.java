@@ -40,6 +40,7 @@ public final class GuiceListener extends GuiceResteasyBootstrapServletContextLis
       bind(ProductREST.class).toInstance(new ProductREST(
         new ProductDAO(dbProperties),
         new OrganizationDAO(dbProperties)));
+      bind(InfoREST.class);
     }
   }
 }
