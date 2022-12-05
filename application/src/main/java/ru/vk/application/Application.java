@@ -55,7 +55,6 @@ public class Application {
 
     context.addServlet(HttpServletDispatcher.class, "/");
     context.addEventListener(new GuiceListener(dbProperties));
-    server.setHandler(context);
 
     filterOneHolder.setInitParameter("maxRequests", "1");
     context.addFilter(filterOneHolder, "/*", EnumSet.of(DispatcherType.REQUEST));

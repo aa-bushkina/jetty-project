@@ -57,12 +57,12 @@ public final class SecurityHandlerBuilder {
     final List<ConstraintMapping> constraintMappings = new ArrayList<>();
     constraintMappings.addAll(constraintFullMapping(
       buildConstraint(MANAGER),
-      Collections.singletonList("/products")
+      Collections.singletonList("/products/*")
     ));
 
     constraintMappings.addAll(constraintGetMapping(
       buildConstraint(GUEST, MANAGER),
-      Collections.singletonList("/products")
+      Collections.singletonList("/products/*")
     ));
 
     security.setConstraintMappings(constraintMappings);
