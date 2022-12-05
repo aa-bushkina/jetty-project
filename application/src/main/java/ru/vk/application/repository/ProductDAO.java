@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.row;
 @SuppressWarnings({"NotNullNullableValidation", "SqlNoDataSourceInspection", "SqlResolve"})
 public final class ProductDAO implements Dao<Products> {
   @NotNull
-  final DBProperties dbProperties;
+  private final DBProperties dbProperties;
 
   @Inject
   public ProductDAO(@NotNull final DBProperties dbProperties) {
@@ -28,15 +28,19 @@ public final class ProductDAO implements Dao<Products> {
   }
 
   private Connection getConnection() throws SQLException {
+    System.out.println("properties" + dbProperties.getConnection() + dbProperties.getName() +
+      dbProperties.getUsername() +
+      dbProperties.getPassword());
     return DriverManager.getConnection(
-      dbProperties.connection() + dbProperties.name(),
-      dbProperties.username(),
-      dbProperties.password());
+      dbProperties.getConnection() + dbProperties.getName(),
+      dbProperties.getUsername(),
+      dbProperties.getPassword());
   }
 
   @Override
   public @NotNull Products get(final int id) {
     try (Connection conn = getConnection()) {
+      System.out.println(conn);
       final DSLContext context = DSL.using(conn, SQLDialect.POSTGRES);
       final Products product;
       try {
@@ -52,7 +56,7 @@ public final class ProductDAO implements Dao<Products> {
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
-    throw new IllegalStateException("Record with id " + id + "not found");
+    throw new IllegalStateException("Record with id " + id + " not found");
   }
 
   @Override
@@ -126,7 +130,7 @@ public final class ProductDAO implements Dao<Products> {
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
-    throw new IllegalStateException("Record with name " + name + "not found");
+    throw new IllegalStateException("Record with name " + name + " not found");
   }
 
   public @NotNull Products findByNameAndOrganization(@NotNull final String name,
@@ -145,6 +149,6 @@ public final class ProductDAO implements Dao<Products> {
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
-    throw new IllegalStateException("Record with name " + name + "not found");
+    throw new IllegalStateException("Record with name " + name + " not found");
   }
 }

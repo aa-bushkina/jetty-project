@@ -20,7 +20,7 @@ import static org.jooq.impl.DSL.row;
 @SuppressWarnings({"NotNullNullableValidation", "SqlNoDataSourceInspection", "SqlResolve"})
 public final class OrganizationDAO implements Dao<Organizations> {
   @NotNull
-  DBProperties dbProperties;
+  private final DBProperties dbProperties;
 
   @Inject
   public OrganizationDAO(@NotNull final DBProperties dbProperties) {
@@ -29,9 +29,10 @@ public final class OrganizationDAO implements Dao<Organizations> {
 
   private Connection getConnection() throws SQLException {
     return DriverManager.getConnection(
-      dbProperties.connection() + dbProperties.name(),
-      dbProperties.username(),
-      dbProperties.password());
+      dbProperties.getConnection() + dbProperties.getName(),
+      dbProperties.getUsername(),
+      dbProperties.getPassword());
+
   }
 
   @Override

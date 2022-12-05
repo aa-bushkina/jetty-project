@@ -6,9 +6,8 @@ import ru.vk.application.utils.DBProperties;
 
 public class FlywayInitializer {
   @NotNull
-  final private DBProperties DBProperties;
-
-  Flyway flyway;
+  private final DBProperties DBProperties;
+  private Flyway flyway;
 
   public FlywayInitializer(@NotNull final DBProperties dbProperties) {
     DBProperties = dbProperties;
@@ -17,9 +16,9 @@ public class FlywayInitializer {
   public void initDB(@NotNull final String path) {
     flyway = Flyway
       .configure()
-      .dataSource(DBProperties.connection() + DBProperties.name(),
-        DBProperties.username(),
-        DBProperties.password())
+      .dataSource(DBProperties.getConnection() + DBProperties.getName(),
+        DBProperties.getUsername(),
+        DBProperties.getPassword())
       .cleanDisabled(false)
       .locations(path)
       .load();

@@ -13,7 +13,7 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
-                    url = "jdbc:postgresql://localhost/jetty"
+                    url = "jdbc:postgresql://localhost/new"
                     user = "postgres"
                     password = "postgres"
                 }

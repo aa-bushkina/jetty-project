@@ -19,11 +19,12 @@ public class ApplicationModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    DBProperties properties = new DBProperties(args[0], args[1], args[2], args[3]);
-    bind(DBProperties.class).toInstance(properties);
+    final DBProperties properties = new DBProperties(args[0], args[1], args[2], args[3]);
+    bind(DBProperties.class).toInstance(new DBProperties(args[0], args[1], args[2], args[3]));
     bind(FlywayInitializer.class).toInstance(new FlywayInitializer(properties));
     bind(OrganizationDAO.class).toInstance(new OrganizationDAO(properties));
     bind(ProductDAO.class).toInstance(new ProductDAO(properties));
+    //bind(ProductREST.class).toInstance(new ProductREST(new ProductDAO(properties), new OrganizationDAO(properties)));
   }
 
   private boolean checkArgs(@NotNull final String[] args) {

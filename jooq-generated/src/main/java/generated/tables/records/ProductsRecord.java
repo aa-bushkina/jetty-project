@@ -5,7 +5,6 @@ package generated.tables.records;
 
 
 import generated.tables.Products;
-
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record4;

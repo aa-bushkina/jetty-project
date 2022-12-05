@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("NotNullNullableValidation")
 public final class GuiceListener extends GuiceResteasyBootstrapServletContextListener {
 
   @Override
@@ -16,8 +17,10 @@ public final class GuiceListener extends GuiceResteasyBootstrapServletContextLis
   }
 
   private static final class GuiceModule extends AbstractModule {
+    @SuppressWarnings("PointlessBinding")
     @Override
     protected void configure() {
+      bind(QueryREST.class);
       bind(ProductREST.class);
     }
   }

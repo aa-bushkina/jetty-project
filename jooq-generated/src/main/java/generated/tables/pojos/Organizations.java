@@ -4,9 +4,6 @@
 package generated.tables.pojos;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 
@@ -17,9 +14,8 @@ import java.io.Serializable;
 public class Organizations implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  @JsonProperty("id")
+
   private final Integer id;
-  @JsonProperty("name")
   private final String name;
 
   public Organizations(Organizations value) {
@@ -27,10 +23,9 @@ public class Organizations implements Serializable {
     this.name = value.name;
   }
 
-  @JsonCreator
   public Organizations(
-    @JsonProperty(value = "id", required = true) Integer id,
-    @JsonProperty(value = "name", required = true) String name
+    Integer id,
+    String name
   ) {
     this.id = id;
     this.name = name;
