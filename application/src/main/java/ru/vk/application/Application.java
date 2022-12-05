@@ -9,6 +9,7 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlets.QoSFilter;
 import org.eclipse.jetty.util.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import ru.vk.Main;
@@ -49,6 +50,8 @@ public class Application {
     final Server server = myServer.build();
     final OnlyGetFilter onlyGetFilter = new OnlyGetFilter();
     final FilterHolder filterGetHolder = new FilterHolder(onlyGetFilter);
+    final QoSFilter onlyOneRequestFilter = new QoSFilter();
+    final FilterHolder filterOneHolder = new FilterHolder(onlyOneRequestFilter);
 
     final var context = new ServletContextHandler();
     context.setContextPath("/");
@@ -62,6 +65,9 @@ public class Application {
     context.addServlet(
       new ServletHolder("servlet-help", DefaultServlet.class), "/");
     context.addFilter(filterGetHolder, "/", EnumSet.of(DispatcherType.REQUEST));
+
+    filterOneHolder.setInitParameter("maxRequests", "1");
+    context.addFilter(filterOneHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
 
     final String hashConfig = Main.class.getResource("/config/hash_config").toExternalForm();
     final HashLoginService hashLoginService = new HashLoginService("login", hashConfig);
