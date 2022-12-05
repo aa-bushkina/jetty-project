@@ -32,14 +32,19 @@ allprojects {
         implementation("org.jooq:jooq-meta:3.17.5")
 
         implementation("com.fasterxml.jackson.core:jackson-databind:2.14.1")
+        implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+
+        implementation("com.google.inject.extensions:guice-servlet:5.1.0")
+        implementation("org.glassfish.hk2:guice-bridge:3.0.3")
+
+        implementation("org.jboss.resteasy:resteasy-guice:4.7.7.Final")
+        implementation("org.jboss.resteasy:resteasy-jackson2-provider:6.2.1.Final")
 
         implementation("javax.ws.rs:javax.ws.rs-api:2.1.1")
+        implementation("javax.servlet:javax.servlet-api:4.0.1")
 
         implementation("org.jetbrains:annotations:23.0.0")
         implementation("com.google.inject:guice:5.1.0")
-
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
     }
 
     tasks.getByName<Test>("test") {
