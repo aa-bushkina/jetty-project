@@ -1,0 +1,16 @@
+INSERT INTO products (name, organization_id, amount)
+VALUES ('product1', 1, 1050),
+       ('product2', 2, 2300),
+       ('product3', 3, 12800),
+       ('product4', 4, 4000),
+       ('product5', 5, 47848),
+       ('product6', 1, 3000),
+       ('product7', 1, 2734),
+       ('product8', 1, 2500),
+       ('product9', 2, 1256),
+       ('product10', 2, 16580),
+       ('product11', 3, 5636),
+       ('product12', 4, 26675),
+       ('product13', 4, 4536),
+       ('product14', 5, 27745),
+       ('product15', 5, 267458);
