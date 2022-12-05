@@ -46,16 +46,17 @@ public class Application {
 
   public void startServer() throws Exception {
     final Server server = myServer.build();
+
     final OnlyGetFilter onlyGetFilter = new OnlyGetFilter();
     final FilterHolder filterGetHolder = new FilterHolder(onlyGetFilter);
     ServletContextHandler context = new ServletContextHandler();
+    final QoSFilter onlyOneRequestFilter = new QoSFilter();
+    final FilterHolder filterOneHolder = new FilterHolder(onlyOneRequestFilter);
 
     context.addServlet(HttpServletDispatcher.class, "/");
     context.addEventListener(new GuiceListener(dbProperties));
     server.setHandler(context);
 
-    final QoSFilter onlyOneRequestFilter = new QoSFilter();
-    final FilterHolder filterOneHolder = new FilterHolder(onlyOneRequestFilter);
     filterOneHolder.setInitParameter("maxRequests", "1");
     context.addFilter(filterOneHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
     context.addFilter(filterGetHolder, "/info", EnumSet.of(DispatcherType.REQUEST));

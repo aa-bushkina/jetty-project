@@ -28,9 +28,6 @@ public final class ProductDAO implements Dao<Products> {
   }
 
   private Connection getConnection() throws SQLException {
-    System.out.println("properties" + dbProperties.connection() + dbProperties.name() +
-      dbProperties.username() +
-      dbProperties.password());
     return DriverManager.getConnection(
       dbProperties.connection() + dbProperties.name(),
       dbProperties.username(),

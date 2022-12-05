@@ -32,9 +32,9 @@ public final class ProductREST {
   @POST
   @Produces(MediaType.TEXT_PLAIN)
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response post(@QueryParam("name") String name,
-                       @QueryParam("organization") String organization,
-                       @QueryParam("amount") Integer amount) throws JsonProcessingException {
+  public Response add(@QueryParam("name") String name,
+                      @QueryParam("organization") String organization,
+                      @QueryParam("amount") Integer amount) throws JsonProcessingException {
     if ((name == null) || (organization == null) || (amount == null) ||
       (amount < 0)) {
       return Response.status(Response.Status.BAD_REQUEST)
@@ -66,7 +66,40 @@ public final class ProductREST {
   @Path("/all")
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response get() throws JsonProcessingException {
+  public Response getAll() throws JsonProcessingException {
+    @NotNull final ObjectMapper objectMapper = new ObjectMapper();
+    return Response.ok(objectMapper.writeValueAsString(productDAO.all()))
+      .header(HttpHeaders.CACHE_CONTROL, "no-cache").build();
+  }
+
+  @Path("/delete")
+  @POST
+  @Produces(MediaType.TEXT_PLAIN)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response delete(@QueryParam("name") String name) {
+    if (name == null) {
+      return Response.status(Response.Status.BAD_REQUEST)
+        .header(HttpHeaders.CACHE_CONTROL, "no-cache")
+        .build();
+    }
+
+    final Products product = productDAO.findByName(name);
+    final Integer productId = product.getId();
+    if (productId == null) {
+      return Response.status(Response.Status.NOT_FOUND)
+        .header(HttpHeaders.CACHE_CONTROL, "no-cache")
+        .build();
+    }
+    productDAO.delete(product);
+    return Response.ok()
+      .header(HttpHeaders.CACHE_CONTROL, "no-cache")
+      .build();
+  }
+
+  @Path("/byorganization")
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getAllByOrganization() throws JsonProcessingException {
     @NotNull final ObjectMapper objectMapper = new ObjectMapper();
     return Response.ok(objectMapper.writeValueAsString(productDAO.all()))
       .header(HttpHeaders.CACHE_CONTROL, "no-cache").build();
