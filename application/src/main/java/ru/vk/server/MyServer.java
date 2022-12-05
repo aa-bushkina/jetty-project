@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({"NotNullNullableValidation", "FieldCanBeLocal"})
 public final class MyServer {
+  private static final int port = 3466;
   @NotNull
   private final Server server;
-  private static final int port = 3466;
 
   @Inject
   public MyServer(@NotNull final Server server) {

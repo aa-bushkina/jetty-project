@@ -6,6 +6,7 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jetbrains.annotations.NotNull;
+import ru.vk.application.utils.DBProperties;
 import ru.vk.server.MyServer;
 import ru.vk.server.REST.GuiceListener;
 import ru.vk.server.filters.OnlyGetFilter;
@@ -15,12 +16,16 @@ public class Application {
   final private FlywayInitializer initializer;
   @NotNull
   final private MyServer myServer;
+  @NotNull
+  final private DBProperties dbProperties;
 
   @Inject
   public Application(@NotNull final FlywayInitializer initializer,
-                     @NotNull final MyServer myServer) {
+                     @NotNull final MyServer myServer,
+                     @NotNull final DBProperties dbProperties) {
     this.initializer = initializer;
     this.myServer = myServer;
+    this.dbProperties = dbProperties;
   }
 
   public void makeDB(@NotNull final String path) {
@@ -38,7 +43,7 @@ public class Application {
 
     ServletContextHandler context = new ServletContextHandler();
     context.addServlet(HttpServletDispatcher.class, "/");
-    context.addEventListener(new GuiceListener());
+    context.addEventListener(new GuiceListener(dbProperties));
     server.setHandler(context);
    /* final QoSFilter onlyOneRequestFilter = new QoSFilter();
     final FilterHolder filterOneHolder = new FilterHolder(onlyOneRequestFilter);

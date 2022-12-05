@@ -19,26 +19,6 @@ public final class SecurityHandlerBuilder {
 
   private final ConstraintSecurityHandler security = new ConstraintSecurityHandler();
 
-  public ConstraintSecurityHandler build(LoginService loginService) {
-    security.setLoginService(loginService);
-
-    final List<ConstraintMapping> constraintMappings = new ArrayList<>();
-    constraintMappings.addAll(constraintFullMapping(
-      buildConstraint(MANAGER),
-      Collections.singletonList("/products")
-    ));
-
-    constraintMappings.addAll(constraintGetMapping(
-      buildConstraint(GUEST, MANAGER),
-      Collections.singletonList("/products")
-    ));
-
-    security.setConstraintMappings(constraintMappings);
-    security.setAuthenticator(new BasicAuthenticator());
-    security.setDenyUncoveredHttpMethods(true);
-    return security;
-  }
-
   private static Constraint buildConstraint(String... userRoles) {
     final Constraint starterConstraint = new Constraint();
     starterConstraint.setName(Constraint.__BASIC_AUTH);
@@ -69,5 +49,25 @@ public final class SecurityHandlerBuilder {
           return mapping;
         }
       ).collect(Collectors.toList());
+  }
+
+  public ConstraintSecurityHandler build(LoginService loginService) {
+    security.setLoginService(loginService);
+
+    final List<ConstraintMapping> constraintMappings = new ArrayList<>();
+    constraintMappings.addAll(constraintFullMapping(
+      buildConstraint(MANAGER),
+      Collections.singletonList("/products")
+    ));
+
+    constraintMappings.addAll(constraintGetMapping(
+      buildConstraint(GUEST, MANAGER),
+      Collections.singletonList("/products")
+    ));
+
+    security.setConstraintMappings(constraintMappings);
+    security.setAuthenticator(new BasicAuthenticator());
+    security.setDenyUncoveredHttpMethods(true);
+    return security;
   }
 }

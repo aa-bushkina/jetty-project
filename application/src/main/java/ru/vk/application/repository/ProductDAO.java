@@ -28,13 +28,13 @@ public final class ProductDAO implements Dao<Products> {
   }
 
   private Connection getConnection() throws SQLException {
-    System.out.println("properties" + dbProperties.getConnection() + dbProperties.getName() +
-      dbProperties.getUsername() +
-      dbProperties.getPassword());
+    System.out.println("properties" + dbProperties.connection() + dbProperties.name() +
+      dbProperties.username() +
+      dbProperties.password());
     return DriverManager.getConnection(
-      dbProperties.getConnection() + dbProperties.getName(),
-      dbProperties.getUsername(),
-      dbProperties.getPassword());
+      dbProperties.connection() + dbProperties.name(),
+      dbProperties.username(),
+      dbProperties.password());
   }
 
   @Override

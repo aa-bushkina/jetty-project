@@ -16,9 +16,9 @@ public class FlywayInitializer {
   public void initDB(@NotNull final String path) {
     flyway = Flyway
       .configure()
-      .dataSource(DBProperties.getConnection() + DBProperties.getName(),
-        DBProperties.getUsername(),
-        DBProperties.getPassword())
+      .dataSource(DBProperties.connection() + DBProperties.name(),
+        DBProperties.username(),
+        DBProperties.password())
       .cleanDisabled(false)
       .locations(path)
       .load();

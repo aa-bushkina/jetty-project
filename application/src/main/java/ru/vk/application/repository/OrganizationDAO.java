@@ -29,10 +29,9 @@ public final class OrganizationDAO implements Dao<Organizations> {
 
   private Connection getConnection() throws SQLException {
     return DriverManager.getConnection(
-      dbProperties.getConnection() + dbProperties.getName(),
-      dbProperties.getUsername(),
-      dbProperties.getPassword());
-
+      dbProperties.connection() + dbProperties.name(),
+      dbProperties.username(),
+      dbProperties.password());
   }
 
   @Override
