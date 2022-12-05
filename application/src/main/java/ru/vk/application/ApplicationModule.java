@@ -8,7 +8,7 @@ import ru.vk.application.utils.DBProperties;
 
 public class ApplicationModule extends AbstractModule {
   @NotNull
-  final String[] args;
+  private final String[] args;
 
   public ApplicationModule(@NotNull final String[] args) {
     if (!checkArgs(args)) {

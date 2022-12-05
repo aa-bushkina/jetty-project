@@ -23,7 +23,9 @@ import java.util.EnumSet;
 public class Application {
   @NotNull
   final private FlywayInitializer initializer;
+  @NotNull
   final private MyServer myServer;
+  @NotNull
   final private ProductServlet productServlet;
 
   @Inject
